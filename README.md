@@ -4,7 +4,7 @@ Una aplicación web interactiva para el análisis de contenido musical de **La I
 
 ## 🌐 Demo en Vivo
 
-[Ver análisis en GitHub Pages](https://mariapalaciosnieto.github.io/IberiaMusical)
+[Ver análisis en GitHub Pages](https://leximususal.github.io/IberiaMusical)
 
 ## 📊 Características
 
@@ -178,7 +178,7 @@ Proyecto desarrollado en el marco de investigación musicológica. Para consulta
 Para consultas académicas o colaboraciones:
 - **Institución**: Universidad de Salamanca
 - **Proyecto**: LexiMus https://leximus.es/
-- **Repositorio**: [GitHub](https://github.com/MariaPalaciosNieto/analisis-musical-el-sol)
+- **Repositorio**: [GitHub](https://github.com/leximususal/principal)
 
 ## 📜 Licencia y Citación
 
@@ -186,7 +186,7 @@ Si utilizas este trabajo en tu investigación, por favor cita:
 ```
 Análisis Musical de "La Iberia Musical" (1842-1845). 
 Proyecto LexiMus, Universidad de Salamanca. 
-Disponible en: [https://mariapalaciosnieto.github.io/IberiaMusical]
+Disponible en: [https://leximususal.github.io/IberiaMusical]
 ---
 
 **🎼 "El primer testimonio de la modernidad musical española"** • © 2025 Universidad de Salamanca
