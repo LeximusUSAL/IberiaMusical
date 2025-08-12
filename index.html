@@ -733,10 +733,6 @@
                 </div>
             </div>
 
-            <div class="chart-container">
-                <h3 class="chart-title">📈 Evolución Temporal del Léxico Musical (1842-1845)</h3>
-                <canvas id="lexicoTemporalChart" width="400" height="250"></canvas>
-            </div>
 
             <div class="section-card">
                     <h3 class="chart-title">🎯 Términos Técnicos</h3>
@@ -1149,24 +1145,6 @@
                     {termino: "Cavatina", menciones: 456, frecuencia: 5.1},
                     {termino: "Armonía", menciones: 456, frecuencia: 5.1}
                 ],
-                evolucionTemporal: {
-                    opera: [
-                        {año: 1842, menciones: 123}, {año: 1843, menciones: 234}, 
-                        {año: 1844, menciones: 456}, {año: 1845, menciones: 421}
-                    ],
-                    piano: [
-                        {año: 1842, menciones: 156}, {año: 1843, menciones: 267}, 
-                        {año: 1844, menciones: 398}, {año: 1845, menciones: 413}
-                    ],
-                    canto: [
-                        {año: 1842, menciones: 234}, {año: 1843, menciones: 421}, 
-                        {año: 1844, menciones: 567}, {año: 1845, menciones: 654}
-                    ],
-                    cavatina: [
-                        {año: 1842, menciones: 67}, {año: 1843, menciones: 112}, 
-                        {año: 1844, menciones: 156}, {año: 1845, menciones: 121}
-                    ]
-                }
             }
         };
 
@@ -1387,51 +1365,6 @@
                 });
             }
 
-            // Gráfico de evolución temporal
-            const ctx2 = document.getElementById('lexicoTemporalChart')?.getContext('2d');
-            if (ctx2) {
-                new Chart(ctx2, {
-                    type: 'line',
-                    data: {
-                        labels: [1842, 1843, 1844, 1845],
-                        datasets: [
-                            {
-                                label: 'Ópera',
-                                data: datosIberia.lexico.evolucionTemporal.opera.map(e => e.menciones),
-                                borderColor: '#FF6B6B',
-                                backgroundColor: 'rgba(255, 107, 107, 0.1)',
-                                tension: 0.4
-                            },
-                            {
-                                label: 'Piano',
-                                data: datosIberia.lexico.evolucionTemporal.piano.map(e => e.menciones),
-                                borderColor: '#4ECDC4',
-                                backgroundColor: 'rgba(78, 205, 196, 0.1)',
-                                tension: 0.4
-                            },
-                            {
-                                label: 'Canto',
-                                data: datosIberia.lexico.evolucionTemporal.canto.map(e => e.menciones),
-                                borderColor: '#45B7D1',
-                                backgroundColor: 'rgba(69, 183, 209, 0.1)',
-                                tension: 0.4
-                            },
-                            {
-                                label: 'Cavatina',
-                                data: datosIberia.lexico.evolucionTemporal.cavatina.map(e => e.menciones),
-                                borderColor: '#96CEB4',
-                                backgroundColor: 'rgba(150, 206, 180, 0.1)',
-                                tension: 0.4
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { position: 'bottom' } },
-                        scales: { y: { beginAtZero: true } }
-                    }
-                });
-            }
         }
 
         function initPlacesCharts() {
