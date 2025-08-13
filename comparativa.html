@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Comparativo: La Iberia Musical vs Revistas BMH</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #8B4B3B;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+            --background-light: #ecf0f1;
+            --text-light: #6c6c6c;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: var(--primary-color);
+            background: var(--background-light);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            text-align: center;
+            border-top: 5px solid var(--secondary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.2em;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .comparison-overview {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .source-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .source-card.revista-bmh {
+            border-top-color: var(--info-color);
+        }
+
+        .source-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .source-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: var(--background-light);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .section-card {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+
+        .analysis-text {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .data-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .table-header {
+            background: var(--secondary-color);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .table-header.revista-bmh {
+            background: var(--info-color);
+        }
+
+        .table-row {
+            display: flex;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .rank {
+            width: 30px;
+            height: 30px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .item-name {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .item-count {
+            color: var(--text-light);
+            font-size: 0.9em;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            color: var(--primary-color);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .highlight-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .key-differences {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .difference-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .difference-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-overview,
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .source-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎵 Análisis Comparativo Musical 🎵</h1>
+            <p class="subtitle">La Iberia Musical (1842-1845) vs Revistas de Bilbao y Hispanoamericana (1909-1917)</p>
+            <p style="color: var(--text-light); margin-top: 15px;">
+                Comparación exhaustiva de dos corpus musicales españoles separados por más de 60 años
+            </p>
+        </header>
+
+        <div class="comparison-overview">
+            <div class="source-card">
+                <div class="source-title">📰 La Iberia Musical</div>
+                <div class="source-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">1842-1845</span>
+                        <span class="stat-label">Período</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">656,561</span>
+                        <span class="stat-label">Palabras</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">159</span>
+                        <span class="stat-label">Números</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4 años</span>
+                        <span class="stat-label">Duración</span>
+                    </div>
+                </div>
+                <p><strong>Contexto:</strong> Revista romántica temprana, enfoque operístico italiano dominante</p>
+            </div>
+
+            <div class="source-card revista-bmh">
+                <div class="source-title">📚 Revistas BMH</div>
+                <div class="source-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">1909-1917</span>
+                        <span class="stat-label">Período</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">1,759,290</span>
+                        <span class="stat-label">Palabras</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">78</span>
+                        <span class="stat-label">Números</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">9 años</span>
+                        <span class="stat-label">Duración</span>
+                    </div>
+                </div>
+                <p><strong>Contexto:</strong> Revistas especializadas modernistas, diversidad estilística y técnica</p>
+            </div>
+        </div>
+
+        <!-- ANÁLISIS DE COMPOSITORES -->
+        <div class="section-card">
+            <h2 class="section-title">🎼 Compositores: Transformación del Canon Musical</h2>
+            
+            <div class="analysis-text">
+                <p><strong>Cambio Radical en el Canon Compositivo:</strong> Entre 1842-1845 y 1909-1917 se produce una transformación completa en las preferencias compositivas. La Iberia Musical refleja el dominio absoluto de la ópera italiana con <strong>Rossini liderando con 242 menciones</strong>, seguido de otros belcantistas como Donizetti (143) y Bellini (44). En contraste, las Revistas BMH muestran la consolidación del repertorio germánico con <strong>Wagner dominando con 1,380 menciones</strong>, Beethoven (1,197) y Bach (822).</p>
+                
+                <p><strong>Evolución Estilística:</strong> El único compositor que mantiene presencia significativa en ambos períodos es <strong>Mozart</strong> (111 menciones en Iberia vs 578 en BMH) y <strong>Beethoven</strong> (48 vs 1,197), mostrando su progresiva canonización. Paradójicamente, <strong>Verdi apenas aparece en Iberia (26 menciones)</strong> pero tampoco en BMH, sugiriendo un momento específico de recepción operística.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="data-table">
+                    <div class="table-header">La Iberia Musical (1842-1845)</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Rossini</div>
+                        <div class="item-count">242 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Donizetti</div>
+                        <div class="item-count">143 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Mozart</div>
+                        <div class="item-count">111 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Meyerbeer</div>
+                        <div class="item-count">65 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Mercadante</div>
+                        <div class="item-count">51 menciones</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header revista-bmh">Revistas BMH (1909-1917)</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Wagner</div>
+                        <div class="item-count">1,380 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Beethoven</div>
+                        <div class="item-count">1,197 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Bach</div>
+                        <div class="item-count">822 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Granados</div>
+                        <div class="item-count">615 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Mozart</div>
+                        <div class="item-count">578 menciones</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">📊 Hallazgo Clave</div>
+                <p>La presencia de <strong>Granados como 4º compositor más mencionado en BMH</strong> señala la emergencia del nacionalismo musical español, ausente completamente en La Iberia Musical donde predomina exclusivamente el repertorio italiano.</p>
+            </div>
+        </div>
+
+        <!-- ANÁLISIS DE GÉNEROS MUSICALES -->
+        <div class="section-card">
+            <h2 class="section-title">🎭 Géneros Musicales: De la Ópera al Concierto</h2>
+            
+            <div class="analysis-text">
+                <p><strong>Persistencia de la Ópera con Cambio de Contexto:</strong> Aunque la ópera mantiene relevancia en ambos períodos (1,265 menciones en Iberia vs 1,296 en BMH), su posición relativa cambia drásticamente. En La Iberia Musical representa el <strong>género absolutamente dominante</strong>, mientras que en las Revistas BMH queda relegada al segundo lugar tras el <strong>concierto, que lidera con 3,340 menciones</strong>.</p>
+                
+                <p><strong>Diversificación del Repertorio:</strong> Las Revistas BMH muestran una diversificación notable con géneros ausentes en Iberia como el <strong>Lied (417 menciones)</strong> y una mayor presencia de música instrumental (Cuarteto: 983 vs 45, Sinfonía: 880 vs 51). Esto refleja la profesionalización y sofisticación del ambiente musical español entre ambos períodos.</p>
+                
+                <p><strong>Permanencia de Formas Tradicionales:</strong> Géneros como <strong>Canción</strong> mantienen presencia constante (158 en Iberia vs 249 en BMH), sugiriendo la continuidad de formas musicales populares y accesibles.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="data-table">
+                    <div class="table-header">La Iberia Musical</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Ópera</div>
+                        <div class="item-count">1,265 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Concierto</div>
+                        <div class="item-count">626 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Canción</div>
+                        <div class="item-count">158 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Aria</div>
+                        <div class="item-count">154 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Cavatina</div>
+                        <div class="item-count">75 menciones</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header revista-bmh">Revistas BMH</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Concierto</div>
+                        <div class="item-count">3,340 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Ópera</div>
+                        <div class="item-count">1,296 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Cuarteto</div>
+                        <div class="item-count">983 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Sinfonía</div>
+                        <div class="item-count">880 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Lied</div>
+                        <div class="item-count">417 menciones</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANÁLISIS DE INSTRUMENTOS -->
+        <div class="section-card">
+            <h2 class="section-title">🎹 Instrumentos: Continuidad y Transformación</h2>
+            
+            <div class="analysis-text">
+                <p><strong>Dominio Vocal Constante:</strong> El <strong>canto mantiene una posición dominante</strong> en ambos períodos (2,160 menciones en Iberia vs 1,382 en BMH como "Canto"), reflejando la centralidad de la voz en la cultura musical española. Esta continuidad es especialmente significativa considerando la diferencia temporal de más de 60 años.</p>
+                
+                <p><strong>Ascenso de la Orquesta:</strong> El cambio más notable es el <strong>ascenso de la orquesta al primer lugar en BMH (2,460 menciones)</strong> desde una posición menor en Iberia (428). Esto refleja la profesionalización musical y el desarrollo de instituciones orquestales en España durante el cambio de siglo.</p>
+                
+                <p><strong>Consolidación del Piano:</strong> El piano muestra un crecimiento extraordinario de 744 menciones en Iberia a 2,399 en BMH, reflejando tanto la democratización del instrumento como su centralidad en la vida musical burguesa del período modernista.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="data-table">
+                    <div class="table-header">La Iberia Musical</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Canto</div>
+                        <div class="item-count">2,160 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Piano</div>
+                        <div class="item-count">744 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Orquesta</div>
+                        <div class="item-count">428 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Violín</div>
+                        <div class="item-count">127 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Flauta</div>
+                        <div class="item-count">81 menciones</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header revista-bmh">Revistas BMH</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Orquesta</div>
+                        <div class="item-count">2,460 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Piano</div>
+                        <div class="item-count">2,399 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Canto</div>
+                        <div class="item-count">1,382 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Violín</div>
+                        <div class="item-count">972 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Coro</div>
+                        <div class="item-count">648 menciones</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">🎯 Insight Clave</div>
+                <p>La aparición del <strong>Coro en el top 5 de BMH (648 menciones)</strong> y del <strong>Violonchelo (387 menciones)</strong> refleja el desarrollo de agrupaciones musicales más complejas y la diversificación instrumental característica del período modernista.</p>
+            </div>
+        </div>
+
+        <!-- ANÁLISIS GEOGRÁFICO -->
+        <div class="section-card">
+            <h2 class="section-title">🌍 Geografía Musical: Centralización y Internacionalización</h2>
+            
+            <div class="analysis-text">
+                <p><strong>Madrid Refuerza su Hegemonía:</strong> <strong>Madrid mantiene su dominancia absoluta</strong> incrementando ligeramente su presencia (1,263 menciones en Iberia vs 1,328 en BMH). Esta consistencia confirma la centralización cultural española durante todo el siglo XIX y principios del XX.</p>
+                
+                <p><strong>París como Constante Internacional:</strong> <strong>París emerge como la referencia internacional constante</strong>, aumentando significativamente su presencia (316 en Iberia vs 749 en BMH). Esto refleja la persistente influencia cultural francesa y el cosmopolitismo creciente de las élites musicales españolas.</p>
+                
+                <p><strong>Transformación del Mapa Musical Europeo:</strong> Mientras Milán (75 menciones) y Nápoles (46) desaparecen de las menciones principales en BMH, emergen <strong>Berlín (357 menciones) y se consolida Viena</strong>, reflejando el desplazamiento del centro musical europeo hacia el ámbito germánico.</p>
+                
+                <p><strong>Desarrollo Regional Español:</strong> <strong>Barcelona duplica su presencia</strong> (67 en Iberia vs 700 en BMH) y <strong>Bilbao emerge con fuerza</strong> (13 vs 522), indicando la descentralización cultural y el desarrollo de focos musicales regionales, especialmente en el País Vasco y Cataluña.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="data-table">
+                    <div class="table-header">La Iberia Musical</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Madrid</div>
+                        <div class="item-count">1,263 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">París</div>
+                        <div class="item-count">316 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Valencia</div>
+                        <div class="item-count">80 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Milán</div>
+                        <div class="item-count">75 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Sevilla</div>
+                        <div class="item-count">75 menciones</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header revista-bmh">Revistas BMH</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Madrid</div>
+                        <div class="item-count">1,328 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">París</div>
+                        <div class="item-count">749 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Barcelona</div>
+                        <div class="item-count">700 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Bilbao</div>
+                        <div class="item-count">522 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Valencia</div>
+                        <div class="item-count">384 menciones</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANÁLISIS DE TÉRMINOS TÉCNICOS -->
+        <div class="section-card">
+            <h2 class="section-title">📚 Terminología Técnica: Sofisticación del Discurso Musical</h2>
+            
+            <div class="analysis-text">
+                <p><strong>Permanencia del Vocabulario Fundamental:</strong> Términos como <strong>Armonía y Melodía mantienen presencia constante</strong> (Armonía: 118 en Iberia vs 192 en BMH; Melodía: 87 vs 752), aunque con diferente prominencia relativa, indicando la consolidación de un vocabulario técnico básico.</p>
+                
+                <p><strong>Sofisticación Interpretativa:</strong> Las Revistas BMH introducen términos relacionados con la interpretación como <strong>Ritmo (666 menciones), Interpretación (648) y Ejecución (497)</strong>, ausentes en los primeros puestos de Iberia. Esto refleja una mayor sofisticación en el discurso sobre la práctica musical.</p>
+                
+                <p><strong>Persistencia de Términos Estéticos:</strong> La presencia de <strong>Gusto (421 menciones en Iberia)</strong> y términos emocionales como <strong>Sentimiento (219) y Expresión (158)</strong> muestra la continuidad del discurso estético romántico, aunque con menor prominencia relativa en el período modernista.</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="data-table">
+                    <div class="table-header">La Iberia Musical - Términos Técnicos</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Gusto</div>
+                        <div class="item-count">421 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Ejecución</div>
+                        <div class="item-count">251 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Sentimiento</div>
+                        <div class="item-count">219 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Expresión</div>
+                        <div class="item-count">158 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Armonía</div>
+                        <div class="item-count">118 menciones</div>
+                    </div>
+                </div>
+
+                <div class="data-table">
+                    <div class="table-header revista-bmh">Revistas BMH - Términos Técnicos</div>
+                    <div class="table-row">
+                        <div class="rank">1</div>
+                        <div class="item-name">Melodía</div>
+                        <div class="item-count">752 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">2</div>
+                        <div class="item-name">Ritmo</div>
+                        <div class="item-count">666 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">3</div>
+                        <div class="item-name">Interpretación</div>
+                        <div class="item-count">648 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">4</div>
+                        <div class="item-name">Ejecución</div>
+                        <div class="item-count">497 menciones</div>
+                    </div>
+                    <div class="table-row">
+                        <div class="rank">5</div>
+                        <div class="item-name">Harmonía</div>
+                        <div class="item-count">258 menciones</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SÍNTESIS COMPARATIVA -->
+        <div class="section-card">
+            <h2 class="section-title">🎯 Síntesis Comparativa: Transformación del Paradigma Musical Español</h2>
+            
+            <div class="key-differences">
+                <div class="difference-item">
+                    <div class="difference-title">🔄 Cambio de Canon Compositivo</div>
+                    <p>Transición del dominio italiano (Rossini, Donizetti) al germánico (Wagner, Beethoven, Bach) con emergencia del nacionalismo español (Granados).</p>
+                </div>
+                
+                <div class="difference-item">
+                    <div class="difference-title">🎭 Diversificación de Géneros</div>
+                    <p>De la hegemonía operística a la diversidad: el concierto supera a la ópera, aparición del Lied y fortalecimiento de la música instrumental.</p>
+                </div>
+                
+                <div class="difference-item">
+                    <div class="difference-title">🎹 Profesionalización Instrumental</div>
+                    <p>Ascenso de la orquesta al primer lugar, consolidación del piano y aparición de nuevas formaciones (coro, violonchelo).</p>
+                </div>
+                
+                <div class="difference-item">
+                    <div class="difference-title">🌍 Reconfiguración Geográfica</div>
+                    <p>Persistencia de Madrid, ascenso de París, emergencia de Barcelona y Bilbao, desplazamiento del eje italiano al germánico.</p>
+                </div>
+                
+                <div class="difference-item">
+                    <div class="difference-title">📚 Sofisticación Terminológica</div>
+                    <p>Del discurso estético romántico (Gusto, Sentimiento) al técnico especializado (Ritmo, Interpretación).</p>
+                </div>
+                
+                <div class="difference-item">
+                    <div class="difference-title">📊 Intensificación Cuantitativa</div>
+                    <p>Notable incremento en todas las menciones, reflejando la profesionalización y especialización del discurso musical.</p>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <div class="highlight-title">🎵 Conclusión Principal</div>
+                <p>Los datos revelan una <strong>transformación radical del paradigma musical español entre 1842-1845 y 1909-1917</strong>. La evolución desde un modelo centrado en la ópera italiana hacia un panorama diversificado, técnicamente sofisticado y cosmopolita refleja la modernización cultural española y su integración en las corrientes musicales europeas contemporáneas. La emergencia del nacionalismo musical (Granados) y la consolidación de centros regionales (Barcelona, Bilbao) señalan además el desarrollo de una identidad musical específicamente española dentro del contexto internacional.</p>
+            </div>
+        </div>
+
+        <footer style="background: var(--primary-color); color: white; padding: 30px; border-radius: 15px; margin-top: 40px; text-align: center;">
+            <p><strong>📊 Análisis Comparativo Musical Español</strong></p>
+            <p>Basado en los corpus "La Iberia Musical" e "Revistas de Bilbao y Hispanoamericana"</p>
+            <p style="margin-top: 15px; opacity: 0.8;">Proyecto LexiMus • Universidad de Salamanca • 2024</p>
+        </footer>
+    </div>
+
+    <script>
+        // Datos comparativos para futuras visualizaciones
+        const datosComparativa = {
+            iberiaMusical: {
+                periodo: "1842-1845",
+                palabras: 656561,
+                compositores: [
+                    {nombre: "Rossini", menciones: 242},
+                    {nombre: "Donizetti", menciones: 143},
+                    {nombre: "Mozart", menciones: 111},
+                    {nombre: "Meyerbeer", menciones: 65},
+                    {nombre: "Mercadante", menciones: 51}
+                ],
+                generos: [
+                    {nombre: "Ópera", menciones: 1265},
+                    {nombre: "Concierto", menciones: 626},
+                    {nombre: "Canción", menciones: 158},
+                    {nombre: "Aria", menciones: 154},
+                    {nombre: "Cavatina", menciones: 75}
+                ]
+            },
+            revistasBMH: {
+                periodo: "1909-1917", 
+                palabras: 1759290,
+                compositores: [
+                    {nombre: "Wagner", menciones: 1380},
+                    {nombre: "Beethoven", menciones: 1197},
+                    {nombre: "Bach", menciones: 822},
+                    {nombre: "Granados", menciones: 615},
+                    {nombre: "Mozart", menciones: 578}
+                ],
+                generos: [
+                    {nombre: "Concierto", menciones: 3340},
+                    {nombre: "Ópera", menciones: 1296},
+                    {nombre: "Cuarteto", menciones: 983},
+                    {nombre: "Sinfonía", menciones: 880},
+                    {nombre: "Lied", menciones: 417}
+                ]
+            }
+        };
+
+        console.log("Datos comparativos cargados:", datosComparativa);
+    </script>
+</body>
+</html>
